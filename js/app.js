@@ -20,24 +20,20 @@ function allowdrop(e) {
 }
 
 function drag(e) {
-    e.dataTransfer.setData('img', e.target.id);
+    e.dataTransfer.setData('num', e.target.id);
 }
 
 function drop(e) {
-    let dragged = document.querySelector('#' + e.dataTransfer.getData('img'));
+    let dragged = document.querySelector('#' + e.dataTransfer.getData('num'));
     let droped = e.target;
 
-    if (droped.classList.contains('ok'))
-        return notification(`Cette ${droped.alt} a déjà été mangée. Ca serait dommage ` + 
-                            `d'imposer une gamelle vide à ce pauvre ${dragged.alt} ...`);
+    if (dragged.textContent % 2 === 0 && droped.textContent % 2 !== 0)
+        return notification(`Vous devez déposer une value impaire.`);
 
-    if (dragged.getAttribute('meta-type') !== droped.getAttribute('meta-type'))
-        return notification(`Le ${dragged.alt} trouve que la ${droped.alt} a un goût bizare. ` + 
-                            `Il décide de ne pas la manger.`);
+    if (dragged.textContent % 2 !== 0 && droped.textContent % 2 === 0)
+        return notification(`Vous devez déposer une valeur paire.`);
 
-    droped.classList.add('ok');
-    dragged.classList.add('disabled');
-    dragged.draggable = false;
+    droped.textContent = droped.textContent * dragged.textContent;
 }
 
 function notification(message) {
